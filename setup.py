@@ -7,7 +7,7 @@ dependencies = [
 
 setuptools.setup(
     name='traceback_notify',
-    version='0.1',
+    version='0.2',
     author='Ihor Vnukov',
     packages=['traceback_notifier'],
     package_data={"": ["*.html", ]},

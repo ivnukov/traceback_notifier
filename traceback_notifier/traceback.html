@@ -8,10 +8,13 @@
     <h3>
         {{ scope }}: {{ exception_name }} | {{ timestamp }}
     </h3>
-    <div class="traceback">
-        <pre>
+<div class="traceback">
+    <pre>
 {{ traceback }}
-        </pre>
-    </div>
+    </pre>
+</div>
+<pre>
+{{ extra_context }}
+</pre>
 </body>
 </html>

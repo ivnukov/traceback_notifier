@@ -57,35 +57,38 @@ class Notifier:
         """
         return f"{self.scope}: {exception.__class__.__name__} | {self.triggered}"
 
-    def render_html(self, exception: Exception, traceback: str) -> str:
+    def render_html(self, exception: Exception, traceback: str, extra_context: dict = None) -> str:
         """
         Renders jinja template.
         :param exception: raised Exception.
         :param traceback: formatted traceback of exception.
-        :return: string with html markup to send via email
+        :param extra_context: additional context to display.
+        :return: string with html markup to send via email.
         """
         env = Environment(
-            loader=FileSystemLoader(os.path.join(os.getcwd(), 'templates')),
+            loader=FileSystemLoader(os.path.join(os.getcwd())),
             autoescape=select_autoescape(['html', 'xml'])
         )
         template = env.get_template('traceback.html')
         html = template.render(**dict(exception_name=exception.__class__.__name__,
                                       timestamp=self.triggered,
                                       traceback=traceback,
-                                      scope=self.scope))
+                                      scope=self.scope,
+                                      extra_context=extra_context))
         return html
 
-    def notify(self, exception: Exception, traceback: str) -> None:
+    def notify(self, exception: Exception, traceback: str, extra_context: dict = None) -> None:
         """
         Send email with traceback info.
         :param exception: raised Exception.
         :param traceback: formatted traceback of exception.
+        :param extra_context: additional context to display in email
         :return: None
         """
         mail = Mail(
             from_email=settings.EMAIL_FROM,
             to_emails=settings.SEND_TO,
             subject=self.generate_subject(exception),
-            html_content=self.render_html(exception, traceback)
+            html_content=self.render_html(exception, traceback, extra_context)
         )
         self.sendgrid_client.send(mail)
