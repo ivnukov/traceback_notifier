@@ -66,7 +66,7 @@ class Notifier:
         :return: string with html markup to send via email.
         """
         env = Environment(
-            loader=FileSystemLoader(os.path.join(os.getcwd())),
+            loader=FileSystemLoader(os.path.dirname(os.path.abspath(__file__))),
             autoescape=select_autoescape(['html', 'xml'])
         )
         template = env.get_template('traceback.html')
